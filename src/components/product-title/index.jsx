@@ -1,50 +1,51 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/slices/cart-slice";
+import { Typography } from "@material-tailwind/react";
 
 const ProductTile = ({ product }) => {
-  const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state);
+    const dispatch = useDispatch();
+    const { cart } = useSelector((state) => state);
 
-  function handleAddToCart() {
-    dispatch(addToCart(product));
-  }
-  function handleRemoveFromCart() {
-    dispatch(removeFromCart(product.id));
-  }
+    function handleAddToCart() {
+        dispatch(addToCart(product));
+    }
+    function handleRemoveFromCart() {
+        dispatch(removeFromCart(product?.id));
+    }
 
-  return (
-    <div>
-      <div className="group flex flex-col items-center border-2 border-red-900  gap-3 p-4 h-[360px] mt-10 ml-5 rounded-xl">
-        <div className="h-[180px]">
-          <img
-            src={product?.image}
-            alt={product?.title}
-            className="object-cover h-full w-full"
-          />
-        </div>
+    return (
         <div>
-          <h1 className="w-40 truncate  mt-3 text-green-700 font-bold text-lg">
-            {product?.title}
-          </h1>
+            <div className=" flex flex-col items-center justify-around  border-2 shadow-lg  h-[360px] mt-10 rounded-xl w-96 lg:w-60">
+                <div className="h-[180px] mt-2">
+                    <img
+                        src={product?.image}
+                        alt={product?.title}
+                        className="object-cover  h-full p-3 "
+                    />
+                </div>
+                <div>
+                    <Typography variant="h3" className="w-72 truncate  ">
+                        {product?.title}
+                    </Typography>
+                </div>
+                <div className=" w-full flex justify-center items-center">
+                    <button
+                        onClick={
+                            cart.some((item) => item.id === product?.id)
+                                ? handleRemoveFromCart
+                                : handleAddToCart
+                        }
+                        className="bg-red-900 text-white border-2 rounded-lg font-bold  w-2/3  p-3 mb-2"
+                    >
+                        {cart.some((item) => item.id === product?.id)
+                            ? "Remove from cart"
+                            : "Add to Card"}
+                    </button>
+                </div>
+            </div>
         </div>
-        <div className="flex items-center justify-between w-full mt-5">
-          <button
-            onClick={
-              cart.some((item) => item.id === product.id)
-                ? handleRemoveFromCart
-                : handleAddToCart
-            }
-            className="bg-red-900 text-white border-2 rounded-lg font-bold p-4"
-          >
-            {cart.some((item) => item.id === product?.id)
-              ? "remove from cart"
-              : "Add toCard"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProductTile;

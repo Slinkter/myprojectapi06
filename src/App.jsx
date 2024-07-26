@@ -6,16 +6,15 @@ import Cart from "./pages/cart";
 import Header from "./components/header";
 
 const App = () => {
-  return (
-    <div>
-      <Header />
-
-      <Routes>
-        <Route exac path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-      </Routes>
-    </div>
-  );
+    return (
+        <>
+            <Header />
+            <Routes>
+                <Route exac path="/" element={<Home />} />
+                <Route path="/cart" element={<Cart />} />
+            </Routes>
+        </>
+    );
 };
 
 export default App;
