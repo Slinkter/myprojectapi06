@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .container-label {
+        @apply grid mt-16 min-h-[100vh] w-full lg:h-[54rem] md:h-[34rem] place-items-stretch  bg-center bg-contain bg-no-repeat;
+    }
+}
