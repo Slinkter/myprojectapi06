@@ -3,7 +3,21 @@
 @tailwind utilities;
 
 @layer components {
-    .container-label {
-        @apply grid mt-16 min-h-[100vh] w-full lg:h-[54rem] md:h-[34rem] place-items-stretch  bg-center bg-contain bg-no-repeat;
+    .container-custom {
+        @apply h-dvh flex justify-center items-center relative;
+    }
+    .arrow-custom {
+        @apply absolute w-10 h-10;
+    }
+
+    .arrow-left {
+        @apply left-4;
+    }
+
+    .arrow-right {
+        @apply right-4;
+    }
+    .img-custom {
+        @apply w-96 h-96;
     }
 }
