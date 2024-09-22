@@ -1,9 +1,5 @@
-import { Button, Typography } from "@material-tailwind/react";
-import { Input } from "postcss";
-import React, { useEffect, useState } from "react";
-
-import { FaArrowCircleLeft } from "react-icons/fa";
-import { FaArrowCircleRight } from "react-icons/fa";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 const App = () => {
     const [loading, setLoading] = useState(true);
@@ -11,7 +7,7 @@ const App = () => {
     const [data, setData] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const getDataImg = async () => {
+    const getDataImg = useCallback(async () => {
         try {
             setLoading(true);
             const url = "https://picsum.photos/v2/list?page=1&limit=10";
@@ -23,56 +19,83 @@ const App = () => {
         } finally {
             setLoading(false);
         }
-    };
-    const prevImg = () => {
-        const lastElemnt = data.length - 1;
+    }, []);
 
-        setCurrentIndex(currentIndex === 0 ? lastElemnt : currentIndex - 1);
-    };
-    const nextImg = () => {
-        const lastElemnt = data.length - 1;
-        setCurrentIndex(currentIndex === lastElemnt ? 0 : currentIndex + 1);
-    };
+    // Memoriza el último índice basado en la longitud de `data`
+    const lastElement = useMemo(() => data.length - 1, [data.length]);
+
+    // Funciones de navegación optimizadas con useCallback
+    const prevImg = useCallback(() => {
+        setCurrentIndex((prev) => (prev === 0 ? lastElement : prev - 1));
+    }, [lastElement]);
+
+    const nextImg = useCallback(() => {
+        setCurrentIndex((prev) => (prev === lastElement ? 0 : prev + 1));
+    }, [lastElement]);
 
     useEffect(() => {
         getDataImg();
-    }, []);
+    }, [getDataImg]);
+
+    if (loading) {
+        return <div className="container-custom">loading ...</div>;
+    }
+    if (error) {
+        return <div className="container-custom">error ... {error} </div>;
+    }
 
     console.log(data);
-
     return (
         <>
-            <div className="container-custom ">
-                <div>
-                    <FaArrowCircleLeft
-                        className="arrow-custom arrow-left"
-                        onClick={() => prevImg()}
-                    />
+            {!loading && (
+                <div className="container-custom ">
+                    <div className="container-div">
+                        <BsArrowLeftCircleFill
+                            className="arrow-custom arrow-left"
+                            onClick={() => prevImg()}
+                        />
 
-                    {data &&
-                        data.length > 0 &&
-                        data.map((item, idx) => {
-                            return (
-                                <div key={idx}>
-                                    <img
-                                        src={item.download_url}
-                                        alt={item.author}
-                                        className={
-                                            currentIndex == idx
-                                                ? "img-custom"
-                                                : "hidden"
-                                        }
-                                    />
-                                </div>
-                            );
-                        })}
-
-                    <FaArrowCircleRight
-                        className="arrow-custom arrow-right"
-                        onClick={() => nextImg()}
-                    />
+                        {data &&
+                            data.length > 0 &&
+                            data.map((item, idx) => {
+                                return (
+                                    <div key={idx}>
+                                        <img
+                                            src={item.download_url}
+                                            alt={item.author}
+                                            className={
+                                                currentIndex == idx
+                                                    ? "img-custom"
+                                                    : "hidden"
+                                            }
+                                        />
+                                    </div>
+                                );
+                            })}
+                        <span className="circle-indicators-container ">
+                            {data &&
+                                data.length > 0 &&
+                                data.map((item, idx) => {
+                                    return (
+                                        <button
+                                            key={idx}
+                                            className={
+                                                currentIndex === idx
+                                                    ? "current-indicator"
+                                                    : "current-indicator inactive-indicator"
+                                            }
+                                            onClick={() => setCurrentIndex(idx)}
+                                        ></button>
+                                    );
+                                })}
+                        </span>
+                        <BsArrowRightCircleFill
+                            className="arrow-custom arrow-right"
+                            onClick={() => nextImg()}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </>
     );
 };
