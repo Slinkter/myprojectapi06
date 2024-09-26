@@ -1,7 +1,9 @@
+import { Spinner, Typography } from "@material-tailwind/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 const App = () => {
+    window.document.title = "my-projectapi-06";
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [data, setData] = useState([]);
@@ -38,7 +40,12 @@ const App = () => {
     }, [getDataImg]);
 
     if (loading) {
-        return <div className="container-custom">loading ...</div>;
+        return (
+            <div className="container-custom">
+                Loading data...
+                <Spinner className="h-24 w-24" />
+            </div>
+        );
     }
     if (error) {
         return <div className="container-custom">error ... {error} </div>;
@@ -49,6 +56,10 @@ const App = () => {
         <>
             {!loading && (
                 <div className="container-custom ">
+                    <Typography variant="h2" className="my-6">
+                        Picsum API + React + Tailwind CSS
+                    </Typography>
+
                     <div className="container-div">
                         <BsArrowLeftCircleFill
                             className="arrow-custom arrow-left"
